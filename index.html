@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSPDCL Smart Power Portal</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">CSPDCL Smart Power Portal</a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+                <li><a href="#" onclick="showPage('peak-hours')" class="nav-link">Peak Hour Predictor</a></li>
+                <li><a href="#" onclick="showPage('load-shedding')" class="nav-link">Load-Shedding Info</a></li>
+                <li><a href="#" onclick="showPage('about')" class="nav-link">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            
+            <!-- Home Page -->
+            <div id="home-page" class="page">
+                <div class="hero-section">
+                    <h1>Smart Power Awareness Portal</h1>
+                    <p>Empowering consumers with intelligent electricity usage insights for Chhattisgarh</p>
+                    <button class="cta-button" onclick="showPage('peak-hours')">Get Started</button>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Peak Hour Predictor</h3>
+                        <p>Discover optimal electricity usage times for your area. Plan your high-power activities around low-demand periods to reduce costs and grid strain.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Load-Shedding Schedule</h3>
+                        <p>Stay informed about planned power outages in your locality. Plan your daily activities effectively with our 7-day load-shedding calendar.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Energy Awareness</h3>
+                        <p>Learn about smart energy consumption practices and contribute to a more stable and efficient power grid across Chhattisgarh.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peak Hours Page -->
+            <div id="peak-hours-page" class="page hidden">
+                <button class="cta-button" style="margin-bottom:1rem;float:right;" onclick="goHome()">← Back</button>
+                <h2>Peak Hour Predictor</h2>
+                <p>Select your city to view typical peak electricity usage hours and learn how to optimize your energy consumption.</p>
+
+                <div class="form-group">
+                    <label for="city-select">Select Your City/Area:</label>
+                    <select id="city-select" onchange="showPeakHours()">
+                        <option value="">Choose a city...</option>
+                        <option value="Raipur">Raipur</option>
+                        <option value="Bilaspur">Bilaspur</option>
+                        <option value="Korba">Korba</option>
+                        <option value="Durg">Durg</option>
+                        <option value="Jagdalpur">Jagdalpur</option>
+                        <option value="Ambikapur">Ambikapur</option>
+                        <option value="Rajnandgaon">Rajnandgaon</option>
+                        <option value="Raigarh">Raigarh</option>
+                        <option value="Bhilai">Bhilai</option>
+                        <option value="Janjgir">Janjgir</option>
+                    </select>
+                </div>
+
+                <div id="peak-results" class="result-section">
+                    <h3>Peak Hours for <span id="selected-city"></span></h3>
+                    <div id="peak-hours-display" class="peak-hours-display"></div>
+                    <p id="peak-description"></p>
+                </div>
+
+                <div class="info-section">
+                    <h3>What are Peak Hours?</h3>
+                    <p>Peak hours are periods when electricity demand is highest, typically during morning and evening when people are most active. During these times, the power grid experiences maximum load, and electricity costs are often higher.</p>
+
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>Benefits of Knowing Peak Hours</h4>
+                            <ul>
+                                <li>Reduce electricity bills by shifting usage</li>
+                                <li>Contribute to grid stability</li>
+                                <li>Avoid power quality issues</li>
+                                <li>Plan energy-intensive activities better</li>
+                                <li>Support environmental sustainability</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>Challenges</h4>
+                            <ul>
+                                <li>May require lifestyle adjustments</li>
+                                <li>Limited flexibility for essential appliances</li>
+                                <li>Requires consistent monitoring</li>
+                                <li>Weather-dependent variations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>How It Helps Save Energy</h3>
+                    <p>By avoiding peak hours for non-essential activities like laundry, dishwashing, or charging devices, you can reduce demand during critical periods. This not only saves money but also reduces the strain on the power grid, leading to fewer blackouts and a more stable electricity supply for everyone.</p>
+                </div>
+            </div>
+
+            <!-- Load Shedding Page -->
+            <div id="load-shedding-page" class="page hidden">
+                <button class="cta-button" style="margin-bottom:1rem;float:right;" onclick="goHome()">← Back</button>
+                <h2>Load-Shedding Schedule</h2>
+                <p>View planned power outages for your area and plan your activities accordingly.</p>
+
+                <div class="form-group">
+                    <label for="location-select">Select Your Location:</label>
+                    <select id="location-select" onchange="showLoadShedding()">
+                        <option value="">Choose a location...</option>
+                        <option value="Raipur">Raipur</option>
+                        <option value="Bilaspur">Bilaspur</option>
+                        <option value="Korba">Korba</option>
+                        <option value="Durg">Durg</option>
+                        <option value="Jagdalpur">Jagdalpur</option>
+                        <option value="Ambikapur">Ambikapur</option>
+                        <option value="Rajnandgaon">Rajnandgaon</option>
+                        <option value="Raigarh">Raigarh</option>
+                        <option value="Bhilai">Bhilai</option>
+                        <option value="Janjgir">Janjgir</option>
+                    </select>
+                </div>
+
+                <div id="shedding-results" class="result-section">
+                    <h3>7-Day Load-Shedding Schedule for <span id="selected-location"></span></h3>
+                    <table id="shedding-table" class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Time Period</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Affected Areas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shedding-tbody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-section">
+                    <h3>What is Load-Shedding?</h3>
+                    <p>Load-shedding is the deliberate shutdown of electric power in specific areas to prevent the collapse of the entire power system. It's a controlled measure used when electricity demand exceeds supply capacity.</p>
+
+                    <h3>Why is Load-Shedding Planned?</h3>
+                    <p>Planned load-shedding helps maintain grid stability by managing electricity demand during peak periods. It prevents uncontrolled blackouts that could damage equipment and ensures fair distribution of available power across different areas.</p>
+
+                    <h3>Impact on Grid and Users</h3>
+                    <p><strong>Grid Benefits:</strong> Prevents system overload, maintains voltage levels, protects equipment from damage, and ensures overall grid stability.</p>
+                    <p><strong>User Impact:</strong> Allows for better planning of daily activities, reduces unexpected power cuts, and provides predictable power availability schedules.</p>
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div id="about-page" class="page hidden">
+                <h2>About CSPDCL Smart Power Portal</h2>
+                <div class="info-section">
+                    <p>The Smart Power Awareness Portal is a comprehensive web-based platform developed during an internship at CSPDCL (Chhattisgarh State Power Distribution Company Limited), Raipur. This project aims to increase awareness about electricity consumption patterns and help users make informed decisions about their energy usage.</p>
+                    
+                    <h3>Project Objectives</h3>
+                    <ul>
+                        <li>Educate consumers about peak electricity usage patterns</li>
+                        <li>Provide load-shedding schedules for better planning</li>
+                        <li>Promote energy conservation and grid stability</li>
+                        <li>Simulate utility service tools for public awareness</li>
+                    </ul>
+
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><strong>Peak Hour Predictor:</strong> Identifies high-demand periods for different cities</li>
+                        <li><strong>Load-Shedding Scheduler:</strong> Displays planned power outages with detailed schedules</li>
+                        <li><strong>Educational Content:</strong> Provides insights about energy consumption and grid management</li>
+                        <li><strong>Interactive Interface:</strong> User-friendly design with responsive layout</li>
+                    </ul>
+
+                    <h3>Technology Stack</h3>
+                    <ul>
+                        <li><strong>HTML5:</strong> Structure and semantic markup</li>
+                        <li><strong>CSS3:</strong> Modern styling with gradients and animations</li>
+                        <li><strong>JavaScript:</strong> Interactive functionality and data management</li>
+                        <li><strong>JSON:</strong> Mock data storage for demonstration purposes</li>
+                    </ul>
+
+                    <h3>Target Audience</h3>
+                    <p>This portal is designed for residential consumers, commercial establishments, and CSPDCL staff who want to understand electricity consumption patterns and plan their energy usage more effectively.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // CSPDCL Data with peakHours and new loadShedding array
+        const cspdclData = {
+            "Raipur": {
+                peakHours: "6:30 PM – 9:30 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "10AM – 12PM", "duration": "2 hrs", "status": "Scheduled", "area": "Shankar Nagar" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Telibandha" },
+                    { "day": "Thursday", "time": "9AM – 10:30AM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Pandri" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "6PM – 9PM", "duration": "3 hrs", "status": "Scheduled", "area": "Devendra Nagar" },
+                    { "day": "Sunday", "time": "5PM – 6PM", "duration": "1 hr", "status": "Scheduled", "area": "VIP Road" }
+                ]
+            },
+            "Bilaspur": {
+                peakHours: "7:00 PM – 10:00 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "8AM – 9AM", "duration": "1 hr", "status": "Scheduled", "area": "Rajendra Nagar" },
+                    { "day": "Tuesday", "time": "5PM – 6:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Mangla" },
+                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Friday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Sarkanda" },
+                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
+                ]
+            },
+            "Korba": {
+                peakHours: "6:00 PM – 9:00 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Tuesday", "time": "11AM – 12PM", "duration": "1 hr", "status": "Scheduled", "area": "TP Nagar" },
+                    { "day": "Wednesday", "time": "4PM – 5:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Balco Market" },
+                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "7PM – 9PM", "duration": "2 hrs", "status": "Scheduled", "area": "Transport Nagar" },
+                    { "day": "Sunday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Banki Mongra" }
+                ]
+            },
+            "Durg": {
+                peakHours: "5:30 PM – 8:30 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "9AM – 10AM", "duration": "1 hr", "status": "Scheduled", "area": "Risali" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Chandulal" },
+                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Hudco Colony" },
+                    { "day": "Sunday", "time": "3PM – 4:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Gandhi Nagar" }
+                ]
+            },
+            "Jagdalpur": {
+                peakHours: "6:00 PM – 8:30 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "4PM – 6PM", "duration": "2 hrs", "status": "Scheduled", "area": "Lohandiguda" },
+                    { "day": "Tuesday", "time": "8AM – 9AM", "duration": "1 hr", "status": "Scheduled", "area": "Chitrakote" },
+                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Thursday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Gole Bazaar" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Dalpat Sagar" },
+                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
+                ]
+            },
+            "Ambikapur": {
+                peakHours: "7:00 PM – 9:00 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Mission Chowk" },
+                    { "day": "Thursday", "time": "3PM – 4:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Telgaon" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Transport Nagar" },
+                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
+                ]
+            },
+            "Rajnandgaon": {
+                peakHours: "6:30 PM – 9:00 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Manpur" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Thursday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Dongargarh" },
+                    { "day": "Friday", "time": "7AM – 8AM", "duration": "1 hr", "status": "Scheduled", "area": "Borgaon" },
+                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Sunday", "time": "5PM – 6:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Rajeev Nagar" }
+                ]
+            },
+            "Raigarh": {
+                peakHours: "6:00 PM – 9:00 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "9AM – 11AM", "duration": "2 hrs", "status": "Scheduled", "area": "Boirdadar" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Thursday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Basant Vihar" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Kelo Vihar" },
+                    { "day": "Sunday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Kotra Road" }
+                ]
+            },
+            "Bhilai": {
+                peakHours: "6:00 PM – 8:30 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Tuesday", "time": "8PM – 9:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Smriti Nagar" },
+                    { "day": "Wednesday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Sector 10" },
+                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Friday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Khursipar" },
+                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Sunday", "time": "9AM – 10AM", "duration": "1 hr", "status": "Scheduled", "area": "Power House Area" }
+                ]
+            },
+            "Janjgir": {
+                peakHours: "7:00 PM – 9:30 PM",
+                loadShedding: [
+                    { "day": "Monday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Seepat Road" },
+                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Jain Nagar" },
+                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
+                    { "day": "Saturday", "time": "4PM – 5:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Sakti Road" },
+                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
+                ]
+            }
+        };
+
+        // Navigation functionality
+        function showPage(pageName, event) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+            // Show selected page
+            document.getElementById(pageName + '-page').classList.remove('hidden');
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            if (event && event.target.classList.contains('nav-link')) {
+                event.target.classList.add('active');
+            } else {
+                // Set active based on pageName
+                navLinks.forEach(link => {
+                    if ((pageName === 'home' && link.textContent.includes('Home')) ||
+                        (pageName === 'peak-hours' && link.textContent.includes('Peak Hour')) ||
+                        (pageName === 'load-shedding' && link.textContent.includes('Load-Shedding')) ||
+                        (pageName === 'about' && link.textContent.includes('About'))
+                    ) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        }
+        // Overwrite nav link onclicks to pass event
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    const text = link.textContent;
+                    if (text.includes('Home')) showPage('home', e);
+                    if (text.includes('Peak Hour')) showPage('peak-hours', e);
+                    if (text.includes('Load-Shedding')) showPage('load-shedding', e);
+                    if (text.includes('About')) showPage('about', e);
+                };
+            });
+            // Logo click
+            document.querySelector('.logo').onclick = function(e) {
+                e.preventDefault();
+                showPage('home', e);
+            };
+            // Get Started button
+            document.querySelectorAll('.cta-button').forEach(btn => {
+                if (btn.textContent.trim() === 'Get Started') {
+                    btn.onclick = function() { showPage('peak-hours'); };
+                }
+            });
+        });
+        // Back button function
+        function goHome() {
+            showPage('home');
+        }
+
+        // Peak hours functionality
+        function showPeakHours() {
+            const citySelect = document.getElementById('city-select');
+            const selectedCity = citySelect.value;
+            
+            if (!selectedCity) {
+                document.getElementById('peak-results').classList.remove('show');
+                return;
+            }
+            
+            const cityData = cspdclData[selectedCity];
+            const peakHours = cityData.peakHours;
+            
+            // Update city name
+            document.getElementById('selected-city').textContent = selectedCity;
+            
+            // Display peak hours
+            const peakHoursDisplay = document.getElementById('peak-hours-display');
+            peakHoursDisplay.innerHTML = `
+                <div class="peak-hour-badge">
+                    <strong>Peak Hours</strong><br>
+                    ${peakHours}
+                </div>
+            `;
+            
+            // Update description
+            const descriptions = {
+                "Raipur": "Raipur experiences peak demand during evening hours when residential and commercial activities overlap. The highest consumption occurs between 6:30-9:30 PM.",
+                "Bilaspur": "Bilaspur has extended evening peak hours due to industrial and commercial activities. Maximum load occurs during 7:00-10:00 PM.",
+                "Korba": "Korba, being an industrial hub, shows concentrated evening peaks. Peak consumption is from 6:00-9:00 PM.",
+                "Durg": "Durg shows early evening peaks due to mixed residential and industrial consumption patterns during 5:30-8:30 PM.",
+                "Jagdalpur": "Jagdalpur experiences moderate evening peaks with maximum demand between 6:00-8:30 PM.",
+                "Ambikapur": "Ambikapur has shorter but concentrated peak hours during 7:00-9:00 PM.",
+                "Rajnandgaon": "Rajnandgaon shows typical urban consumption patterns with peaks during 6:30-9:00 PM.",
+                "Raigarh": "Raigarh has consistent evening peaks from 6:00-9:00 PM due to mixed urban activities.",
+                "Bhilai": "Bhilai's steel plant operations contribute to evening peaks between 6:00-8:30 PM.",
+                "Janjgir": "Janjgir shows extended evening peaks during 7:00-9:30 PM."
+            };
+            
+            document.getElementById('peak-description').textContent = descriptions[selectedCity];
+            
+            // Show results
+            document.getElementById('peak-results').classList.add('show');
+        }
+
+        // Load shedding functionality
+        function showLoadShedding() {
+            const locationSelect = document.getElementById('location-select');
+            const selectedLocation = locationSelect.value;
+            if (!selectedLocation) {
+                document.getElementById('shedding-results').classList.remove('show');
+                return;
+            }
+            const loadSheddingData = cspdclData[selectedLocation].loadShedding;
+            document.getElementById('selected-location').textContent = selectedLocation;
+            const tbody = document.getElementById('shedding-tbody');
+            tbody.innerHTML = '';
+            loadSheddingData.forEach(entry => {
+                let statusClass = 'status-normal';
+                if (entry.status === 'Scheduled') statusClass = 'status-scheduled';
+                if (entry.status === 'No Outage') statusClass = 'status-normal';
+                if (entry.status === 'Active') statusClass = 'status-active';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${entry.day}</strong></td>
+                    <td>${entry.time}</td>
+                    <td>${entry.duration}</td>
+                    <td><span class="status-badge ${statusClass}">${entry.status}</span></td>
+                    <td>${entry.area}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            document.getElementById('shedding-results').classList.add('show');
+        }
+    </script>
+
+
+
+
+</body>
+</html>

@@ -245,6 +245,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
+    color:rgb(0, 102, 204);
     background: white;
     border-radius: 10px;
     overflow: hidden;
@@ -260,11 +261,12 @@ body {
 
 .schedule-table th {
     background: var(--primary-blue);
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: 600;
 }
 
 .schedule-table tr:hover {
+  
     background: rgba(102, 126, 234, 0.05);
 }
 
@@ -367,5 +369,40 @@ body {
 
     .peak-hours-display {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Custom for Load Shedding Dropdowns --- */
+#load-shedding-page .form-group {
+    margin-bottom: 1rem;
+}
+#load-shedding-page label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+#load-shedding-page select {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 1.5px solid #e1e8ed;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+#show-schedule-btn {
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 300px;
+    display: block;
+}
+@media (max-width: 600px) {
+    #load-shedding-page .form-group {
+        margin-bottom: 0.7rem;
+    }
+    #show-schedule-btn {
+        max-width: 100%;
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
     }
 }

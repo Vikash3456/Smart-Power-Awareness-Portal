@@ -115,9 +115,9 @@
                 <p>View planned power outages for your area and plan your activities accordingly.</p>
 
                 <div class="form-group">
-                    <label for="location-select">Select Your Location:</label>
-                    <select id="location-select" onchange="showLoadShedding()">
-                        <option value="">Choose a location...</option>
+                    <label for="city-select-ls">Select Your City:</label>
+                    <select id="city-select-ls" onchange="populateAreas()">
+                        <option value="">Choose a city...</option>
                         <option value="Raipur">Raipur</option>
                         <option value="Bilaspur">Bilaspur</option>
                         <option value="Korba">Korba</option>
@@ -130,6 +130,19 @@
                         <option value="Janjgir">Janjgir</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="area-select-ls">Select Affected Area:</label>
+                    <select id="area-select-ls" onchange="populateFeeders()">
+                        <option value="">Choose an area...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="feeder-select-ls">Select Feeder:</label>
+                    <select id="feeder-select-ls">
+                        <option value="">Choose a feeder...</option>
+                    </select>
+                </div>
+                <button class="cta-button" id="show-schedule-btn" onclick="showLoadSheddingSchedule()">Show Schedule</button>
 
                 <div id="shedding-results" class="result-section">
                     <h3>7-Day Load-Shedding Schedule for <span id="selected-location"></span></h3>
@@ -140,7 +153,6 @@
                                 <th>Time Period</th>
                                 <th>Duration</th>
                                 <th>Status</th>
-                                <th>Affected Areas</th>
                             </tr>
                         </thead>
                         <tbody id="shedding-tbody">
@@ -203,124 +215,168 @@
         // CSPDCL Data with peakHours and new loadShedding array
         const cspdclData = {
             "Raipur": {
-                peakHours: "6:30 PM – 9:30 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "10AM – 12PM", "duration": "2 hrs", "status": "Scheduled", "area": "Shankar Nagar" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Telibandha" },
-                    { "day": "Thursday", "time": "9AM – 10:30AM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Pandri" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "6PM – 9PM", "duration": "3 hrs", "status": "Scheduled", "area": "Devendra Nagar" },
-                    { "day": "Sunday", "time": "5PM – 6PM", "duration": "1 hr", "status": "Scheduled", "area": "VIP Road" }
-                ]
+                "peakHours": "6:30 PM – 9:30 PM",
+                "AE Contact": "9876543210",
+                "JE Contact": "9876543211",
+                "areas": {
+                    "Dagoniya": {
+                        "feeders": {
+                            "F1": [
+                                { "day": "Monday", "time": "10AM – 12PM", "duration": "2 hrs", "status": "Scheduled" },
+                                { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Wednesday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Thursday", "time": "9AM – 10:30AM", "duration": "1.5 hrs", "status": "Scheduled" },
+                                { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Saturday", "time": "6PM – 9PM", "duration": "3 hrs", "status": "Scheduled" },
+                                { "day": "Sunday", "time": "5PM – 6PM", "duration": "1 hr", "status": "Scheduled" }
+                            ],
+                            "F2": [
+                                { "day": "Monday", "time": "11AM – 1PM", "duration": "2 hrs", "status": "Scheduled" },
+                                { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Wednesday", "time": "5PM – 6PM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Thursday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Saturday", "time": "7PM – 9PM", "duration": "2 hrs", "status": "Scheduled" },
+                                { "day": "Sunday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled" }
+                            ],
+                            "F3": [
+                                { "day": "Monday", "time": "9AM – 10AM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Wednesday", "time": "4PM – 5PM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Thursday", "time": "8AM – 9AM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage" },
+                                { "day": "Saturday", "time": "5PM – 6PM", "duration": "1 hr", "status": "Scheduled" },
+                                { "day": "Sunday", "time": "4PM – 5PM", "duration": "1 hr", "status": "Scheduled" }
+                            ]
+                        }
+                    }
+                }
             },
             "Bilaspur": {
-                peakHours: "7:00 PM – 10:00 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "8AM – 9AM", "duration": "1 hr", "status": "Scheduled", "area": "Rajendra Nagar" },
-                    { "day": "Tuesday", "time": "5PM – 6:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Mangla" },
-                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Friday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Sarkanda" },
-                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
-                ]
+                "peakHours": "7:00 PM – 10:00 PM",
+                "AEContact": "9876543220",
+                "JEContact": "9876543221",
+                "areas": {
+                    "Mangla": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Korba": {
-                peakHours: "6:00 PM – 9:00 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Tuesday", "time": "11AM – 12PM", "duration": "1 hr", "status": "Scheduled", "area": "TP Nagar" },
-                    { "day": "Wednesday", "time": "4PM – 5:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Balco Market" },
-                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "7PM – 9PM", "duration": "2 hrs", "status": "Scheduled", "area": "Transport Nagar" },
-                    { "day": "Sunday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Banki Mongra" }
-                ]
+                "peakHours": "6:00 PM – 9:00 PM",
+                "AEContact": "9876543230",
+                "JEContact": "9876543231",
+                "areas": {
+                    "TP Nagar": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Durg": {
-                peakHours: "5:30 PM – 8:30 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "9AM – 10AM", "duration": "1 hr", "status": "Scheduled", "area": "Risali" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Chandulal" },
-                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Hudco Colony" },
-                    { "day": "Sunday", "time": "3PM – 4:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Gandhi Nagar" }
-                ]
+                "peakHours": "5:30 PM – 8:30 PM",
+                "AEContact": "9876543240",
+                "JEContact": "9876543241",
+                "areas": {
+                    "Risali": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Jagdalpur": {
-                peakHours: "6:00 PM – 8:30 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "4PM – 6PM", "duration": "2 hrs", "status": "Scheduled", "area": "Lohandiguda" },
-                    { "day": "Tuesday", "time": "8AM – 9AM", "duration": "1 hr", "status": "Scheduled", "area": "Chitrakote" },
-                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Thursday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Gole Bazaar" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Dalpat Sagar" },
-                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
-                ]
+                "peakHours": "6:00 PM – 8:30 PM",
+                "AEContact": "9876543250",
+                "JEContact": "9876543251",
+                "areas": {
+                    "Lohandiguda": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Ambikapur": {
-                peakHours: "7:00 PM – 9:00 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Mission Chowk" },
-                    { "day": "Thursday", "time": "3PM – 4:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Telgaon" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Transport Nagar" },
-                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
-                ]
+                "peakHours": "7:00 PM – 9:00 PM",
+                "AEContact": "9876543260",
+                "JEContact": "9876543261",
+                "areas": {
+                    "Mission Chowk": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Rajnandgaon": {
-                peakHours: "6:30 PM – 9:00 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Manpur" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Thursday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Dongargarh" },
-                    { "day": "Friday", "time": "7AM – 8AM", "duration": "1 hr", "status": "Scheduled", "area": "Borgaon" },
-                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Sunday", "time": "5PM – 6:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Rajeev Nagar" }
-                ]
+                "peakHours": "6:30 PM – 9:00 PM",
+                "AEContact": "9876543270",
+                "JEContact": "9876543271",
+                "areas": {
+                    "Manpur": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Raigarh": {
-                peakHours: "6:00 PM – 9:00 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "9AM – 11AM", "duration": "2 hrs", "status": "Scheduled", "area": "Boirdadar" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Thursday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Basant Vihar" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Kelo Vihar" },
-                    { "day": "Sunday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Kotra Road" }
-                ]
+                "peakHours": "6:00 PM – 9:00 PM",
+                "AEContact": "9876543280",
+                "JEContact": "9876543281",
+                "areas": {
+                    "Boirdadar": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Bhilai": {
-                peakHours: "6:00 PM – 8:30 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Tuesday", "time": "8PM – 9:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Smriti Nagar" },
-                    { "day": "Wednesday", "time": "6PM – 7PM", "duration": "1 hr", "status": "Scheduled", "area": "Sector 10" },
-                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Friday", "time": "5PM – 7PM", "duration": "2 hrs", "status": "Scheduled", "area": "Khursipar" },
-                    { "day": "Saturday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Sunday", "time": "9AM – 10AM", "duration": "1 hr", "status": "Scheduled", "area": "Power House Area" }
-                ]
+                "peakHours": "6:00 PM – 8:30 PM",
+                "AEContact": "9876543290",
+                "JEContact": "9876543291",
+                "areas": {
+                    "Smriti Nagar": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             },
             "Janjgir": {
-                peakHours: "7:00 PM – 9:30 PM",
-                loadShedding: [
-                    { "day": "Monday", "time": "10AM – 11AM", "duration": "1 hr", "status": "Scheduled", "area": "Seepat Road" },
-                    { "day": "Tuesday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Wednesday", "time": "6PM – 8PM", "duration": "2 hrs", "status": "Scheduled", "area": "Jain Nagar" },
-                    { "day": "Thursday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Friday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" },
-                    { "day": "Saturday", "time": "4PM – 5:30PM", "duration": "1.5 hrs", "status": "Scheduled", "area": "Sakti Road" },
-                    { "day": "Sunday", "time": "-", "duration": "-", "status": "No Outage", "area": "-" }
-                ]
+                "peakHours": "7:00 PM – 9:30 PM",
+                "AEContact": "9876543300",
+                "JEContact": "9876543301",
+                "areas": {
+                    "Seepat Road": {
+                        "feeders": {
+                            "F1": [],
+                            "F2": [],
+                            "F3": []
+                        }
+                    }
+                }
             }
         };
 
@@ -390,6 +446,8 @@
             
             const cityData = cspdclData[selectedCity];
             const peakHours = cityData.peakHours;
+            const aeContact = cityData["AE Contact"];
+            const jeContact = cityData["JE Contact"];
             
             // Update city name
             document.getElementById('selected-city').textContent = selectedCity;
@@ -400,6 +458,10 @@
                 <div class="peak-hour-badge">
                     <strong>Peak Hours</strong><br>
                     ${peakHours}
+                </div>
+                <div class="contact-info" style="margin-top:1rem;">
+                    <strong>AE Contact:</strong> <a href="tel:${aeContact}">${aeContact}</a><br>
+                    <strong>JE Contact:</strong> <a href="tel:${jeContact}">${jeContact}</a>
                 </div>
             `;
             
@@ -423,19 +485,48 @@
             document.getElementById('peak-results').classList.add('show');
         }
 
-        // Load shedding functionality
-        function showLoadShedding() {
-            const locationSelect = document.getElementById('location-select');
-            const selectedLocation = locationSelect.value;
-            if (!selectedLocation) {
+        // --- Load Shedding Dropdown Logic ---
+        function populateAreas() {
+            const city = document.getElementById('city-select-ls').value;
+            const areaSelect = document.getElementById('area-select-ls');
+            areaSelect.innerHTML = '<option value="">Choose an area...</option>';
+            document.getElementById('feeder-select-ls').innerHTML = '<option value="">Choose a feeder...</option>';
+            if (!city || !cspdclData[city]) return;
+            const areas = Object.keys(cspdclData[city].areas);
+            areas.forEach(area => {
+                const opt = document.createElement('option');
+                opt.value = area;
+                opt.textContent = area;
+                areaSelect.appendChild(opt);
+            });
+        }
+        function populateFeeders() {
+            const city = document.getElementById('city-select-ls').value;
+            const area = document.getElementById('area-select-ls').value;
+            const feederSelect = document.getElementById('feeder-select-ls');
+            feederSelect.innerHTML = '<option value="">Choose a feeder...</option>';
+            if (!city || !area || !cspdclData[city] || !cspdclData[city].areas[area]) return;
+            const feeders = Object.keys(cspdclData[city].areas[area].feeders);
+            feeders.forEach(feeder => {
+                const opt = document.createElement('option');
+                opt.value = feeder;
+                opt.textContent = feeder;
+                feederSelect.appendChild(opt);
+            });
+        }
+        function showLoadSheddingSchedule() {
+            const city = document.getElementById('city-select-ls').value;
+            const area = document.getElementById('area-select-ls').value;
+            const feeder = document.getElementById('feeder-select-ls').value;
+            const tbody = document.getElementById('shedding-tbody');
+            tbody.innerHTML = '';
+            if (!city || !area || !feeder || !cspdclData[city] || !cspdclData[city].areas[area] || !cspdclData[city].areas[area].feeders[feeder]) {
                 document.getElementById('shedding-results').classList.remove('show');
                 return;
             }
-            const loadSheddingData = cspdclData[selectedLocation].loadShedding;
-            document.getElementById('selected-location').textContent = selectedLocation;
-            const tbody = document.getElementById('shedding-tbody');
-            tbody.innerHTML = '';
-            loadSheddingData.forEach(entry => {
+            const schedule = cspdclData[city].areas[area].feeders[feeder];
+            document.getElementById('selected-location').textContent = `${city} - ${area} - ${feeder}`;
+            schedule.forEach(entry => {
                 let statusClass = 'status-normal';
                 if (entry.status === 'Scheduled') statusClass = 'status-scheduled';
                 if (entry.status === 'No Outage') statusClass = 'status-normal';
@@ -446,7 +537,6 @@
                     <td>${entry.time}</td>
                     <td>${entry.duration}</td>
                     <td><span class="status-badge ${statusClass}">${entry.status}</span></td>
-                    <td>${entry.area}</td>
                 `;
                 tbody.appendChild(row);
             });

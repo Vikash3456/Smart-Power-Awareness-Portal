@@ -19,6 +19,18 @@ A user-friendly web application that helps citizens of Chhattisgarh easily view 
 Helps **citizens** stay informed about power outages and peak consumption times, enabling better planning and awareness of local electricity distribution.
 
 ---
+## 🏗️ Project Structure
+<Pre>
+   
+smart-load-dashboard/
+├── index.html
+├── css/
+│ └── style.css
+├── js/
+│ └── script.js
+└── assets/
+</Pre>
+----
 ## 🧪 Sample Workflow
 
 1. 👤 User selects:
